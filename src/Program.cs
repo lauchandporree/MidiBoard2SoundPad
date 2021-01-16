@@ -29,9 +29,19 @@ namespace MidiBoard2SoundPad {
 
         private static void midiIn_MessageReceived(object? sender, MidiInMessageEventArgs e)
         {
-            Console.WriteLine(e.Timestamp + ": " + e.MidiEvent + ": " + e.RawMessage );
+            //Console.WriteLine($"{e.Timestamp}: {e.MidiEvent}: {e.RawMessage}");
+            var controlChangeEvent = ((ControlChangeEvent) e.MidiEvent);
+            if (controlChangeEvent.ControllerValue == 127)
+            {
+                OnButtonPress(controlChangeEvent.Controller);
+            } 
         }
 
+        private static void OnButtonPress(MidiController id)
+        {
+            Console.WriteLine("Button press: " + id);
+        }
+        
         private static void SoundpadOnStatusChanged(object sender, EventArgs e) {
             Console.WriteLine(Soundpad.ConnectionStatus);
 
