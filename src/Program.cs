@@ -10,13 +10,26 @@ namespace MidiBoard2SoundPad {
             for (int device = 0; device < MidiIn.NumberOfDevices; device++) {
                 Console.WriteLine(MidiIn.DeviceInfo(device).ProductName);
             }
-
+            var midiIn = new MidiIn(0);
+            midiIn.MessageReceived += midiIn_MessageReceived;
+            midiIn.ErrorReceived += midiIn_ErrorReceived;
+            midiIn.Start();
             Soundpad = new Soundpad();
-            Soundpad.StatusChanged += SoundpadOnStatusChanged;
+            //Soundpad.StatusChanged += SoundpadOnStatusChanged;
 
             Soundpad.ConnectAsync();
 
             Console.ReadLine();
+        }
+
+        private static void midiIn_ErrorReceived(object? sender, MidiInMessageEventArgs e)
+        {
+            Console.Error.WriteLine(e + "");
+        }
+
+        private static void midiIn_MessageReceived(object? sender, MidiInMessageEventArgs e)
+        {
+            Console.WriteLine(e.Timestamp + ": " + e.MidiEvent + ": " + e.RawMessage );
         }
 
         private static void SoundpadOnStatusChanged(object sender, EventArgs e) {
