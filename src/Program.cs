@@ -15,9 +15,14 @@ namespace MidiBoard2SoundPad {
             midiIn.ErrorReceived += midiIn_ErrorReceived;
             midiIn.Start();
             Soundpad = new Soundpad();
-            //Soundpad.StatusChanged += SoundpadOnStatusChanged;
+            Soundpad.StatusChanged += SoundpadOnStatusChanged;
 
             Soundpad.ConnectAsync();
+
+            if (OnButtonPress() == 41)
+            {
+                Soundpad.PlaySound(index: 6);
+            }
 
             Console.ReadLine();
         }
